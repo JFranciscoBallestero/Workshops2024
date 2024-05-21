@@ -4,11 +4,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const mongoString = process.env.DATABASE_URL
 const routes = require('./routes/routes');
-const router = express.Router()
-
-module.exports = router;
-
-app.use('/api', routes)
 
 mongoose.connect(mongoString);
 const database = mongoose.connection

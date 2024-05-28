@@ -84,3 +84,10 @@ router.get('/hello', async (req, res) => {
     const customMessage = req.query.message ? `Hello ${req.query.message}` : "Hello World";
     res.json({ response: customMessage });
 })
+
+// POST route allowing us the create users
+router.post('/user', async (req, res) => {
+    const name = req.body.name;
+    const lastname = req.body.lastname;
+    res.json({ response: `El usuario ${name} ${lastname} fue creado` });
+});

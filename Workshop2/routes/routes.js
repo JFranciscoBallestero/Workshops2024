@@ -79,7 +79,8 @@ router.delete('/delete/:id', async (req, res) => {
     }
 })
 
-// New GET route to respond with "Hello World"
-router.get('/hello', (req, res) => {
-    res.json({ response: "Hello World" });
+//This GET route will respond with "Hello World" in a json object
+router.get('/hello', async (req, res) => {
+    const customMessage = req.query.message ? `Hello ${req.query.message}` : "Hello World";
+    res.json({ response: customMessage });
 })

@@ -14,7 +14,8 @@ module.exports = router;
 router.post('/post', async (req, res) => {
     const data = new Model({
         name: req.body.name,
-        age: req.body.age
+        age: req.body.age,
+        lastname: req.body.lastname
     })
 
     try {
@@ -87,7 +88,9 @@ router.get('/hello', async (req, res) => {
 
 // POST route allowing us the create users
 router.post('/user', async (req, res) => {
-    const name = req.body.name;
-    const lastname = req.body.lastname;
+    const data = new Model({
+        name: req.body.name,
+        lastname: req.body.lastname
+    })
     res.json({ response: `El usuario ${name} ${lastname} fue creado` });
 });

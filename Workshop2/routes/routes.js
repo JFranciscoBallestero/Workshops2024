@@ -7,6 +7,9 @@ const Model = require('../model/model');
 
 module.exports = router;
 
+
+
+
 //Post Method
 router.post('/post', async (req, res) => {
     const data = new Model({
@@ -74,4 +77,9 @@ router.delete('/delete/:id', async (req, res) => {
     catch (error) {
         res.status(400).json({ message: error.message })
     }
+})
+
+// New GET route to respond with "Hello World"
+router.get('/hello', (req, res) => {
+    res.json({ response: "Hello World" });
 })

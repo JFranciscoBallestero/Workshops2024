@@ -13,10 +13,10 @@ router.get('/', async (req, res) => {
 });
 
 // Get one major by code
-router.get('/:code', async (req, res) => {
+router.get('/code/:code', async (req, res) => {
   try {
     const major = await Major.findOne({ code: req.params.code });
-    if (major == null) {
+    if (!major) {
       return res.status(404).json({ message: 'Cannot find major' });
     }
     res.json(major);
@@ -25,31 +25,27 @@ router.get('/:code', async (req, res) => {
   }
 });
 
-// Create a major with unique code
+// Create a major
 router.post('/', async (req, res) => {
   const major = new Major({
     name: req.body.name,
     code: req.body.code,
-    description: req.body.description
+    description: req.body.description,
   });
 
   try {
     const newMajor = await major.save();
     res.status(201).json(newMajor);
   } catch (err) {
-    if (err.code === 11000) {
-      res.status(400).json({ message: 'Major with this code already exists' });
-    } else {
-      res.status(400).json({ message: err.message });
-    }
+    res.status(400).json({ message: err.message });
   }
 });
 
-// Update a major by code (only update name and description)
-router.put('/:code', async (req, res) => {
+// Update a major by code
+router.put('/code/:code', async (req, res) => {
   try {
     const major = await Major.findOne({ code: req.params.code });
-    if (major == null) {
+    if (!major) {
       return res.status(404).json({ message: 'Cannot find major' });
     }
 
@@ -68,10 +64,10 @@ router.put('/:code', async (req, res) => {
 });
 
 // Delete a major by code
-router.delete('/:code', async (req, res) => {
+router.delete('/code/:code', async (req, res) => {
   try {
     const major = await Major.findOne({ code: req.params.code });
-    if (major == null) {
+    if (!major) {
       return res.status(404).json({ message: 'Cannot find major' });
     }
 

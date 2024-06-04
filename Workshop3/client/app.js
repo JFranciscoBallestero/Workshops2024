@@ -11,7 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
     searchMajorForm.addEventListener('submit', handleSearchMajor);
     updateMajorForm.addEventListener('submit', handleUpdateMajor);
     deleteMajorForm.addEventListener('submit', handleDeleteMajor);
+
+    fetchAllMajors();
+
 });
+
+async function fetchAllMajors() {
+    try {
+        const response = await fetch('http://localhost:3000/api/majors');
+        if (!response.ok) {
+            throw new Error('Failed to fetch majors');
+        }
+        const majors = await response.json();
+        majorsList.innerHTML = ''; // Clear the list before displaying new items
+        majors.forEach(displayMajor);
+    } catch (error) {
+        console.error('Error fetching majors:', error);
+    }
+}
+
 
 async function handleAddMajor(event) {
     event.preventDefault();
@@ -20,7 +38,7 @@ async function handleAddMajor(event) {
     const code = document.getElementById('code').value;
     const description = document.getElementById('description').value;
 
-    const response = await fetch('http://localhost:3000/api/majors/', {
+    const response = await fetch('http://localhost:3000/api/majors', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -77,6 +95,7 @@ async function handleUpdateMajor(event) {
 
     if (response.ok) {
         alert('Major updated successfully');
+        
     } else {
         alert(updatedMajor.message || 'Failed to update major');
     }

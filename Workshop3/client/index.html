@@ -4,59 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Majors</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        input, button {
-            margin: 5px 0;
-            padding: 10px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 10px 0;
-        }
-    </style>
 </head>
 <body>
     <h1>University Majors</h1>
 
+    <h2>Add Major</h2>
     <form id="addMajorForm">
-        <h2>Add Major</h2>
-        <input type="text" id="name" placeholder="Name" required><br>
-        <input type="text" id="code" placeholder="Code" required><br>
-        <input type="text" id="description" placeholder="Description" required><br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="code">Code:</label>
+        <input type="text" id="code" name="code" required><br>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required><br>
         <button type="submit">Add Major</button>
     </form>
 
+    <h2>Search Major</h2>
     <form id="searchMajorForm">
-        <h2>Search Major by Code</h2>
-        <input type="text" id="searchCode" placeholder="Code" required><br>
-        <button type="submit">Search</button>
+        <label for="searchCode">Code:</label>
+        <input type="text" id="searchCode" name="searchCode" required><br>
+        <button type="submit">Search Major</button>
     </form>
 
+    <h2>Update Major</h2>
     <form id="updateMajorForm">
-        <h2>Update Major by Code</h2>
-        <input type="text" id="updateCode" placeholder="Code" required><br>
-        <input type="text" id="updateName" placeholder="New Name"><br>
-        <input type="text" id="updateDescription" placeholder="New Description"><br>
-        <button type="submit">Update</button>
+        <label for="updateCode">Code:</label>
+        <input type="text" id="updateCode" name="updateCode" required><br>
+        <label for="updateName">New Name:</label>
+        <input type="text" id="updateName" name="updateName"><br>
+        <label for="updateDescription">New Description:</label>
+        <input type="text" id="updateDescription" name="updateDescription"><br>
+        <button type="submit">Update Major</button>
     </form>
 
+    <h2>Delete Major</h2>
     <form id="deleteMajorForm">
-        <h2>Delete Major by Code</h2>
-        <input type="text" id="deleteCode" placeholder="Code" required><br>
-        <button type="submit">Delete</button>
+        <label for="deleteCode">Code:</label>
+        <input type="text" id="deleteCode" name="deleteCode" required><br>
+        <button type="submit">Delete Major</button>
     </form>
 
-    <h2>Majors</h2>
+    <h2>Majors List</h2>
     <ul id="majorsList"></ul>
 
     <script src="app.js"></script>

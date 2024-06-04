@@ -8,89 +8,80 @@ const Model = require('../model/model');
 module.exports = router;
 
 
-
-
-//Post Method
-router.post('/post', async (req, res) => {
-    const data = new Model({
-        name: req.body.name,
-        age: req.body.age,
-        lastname: req.body.lastname
-    })
-
+// Get all majors
+router.get('/', async (req, res) => {
     try {
-        const dataToSave = await data.save();
-        res.status(200).json(dataToSave)
+      const majors = await Major.find();
+      res.json(majors);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
-    catch (error) {
-        res.status(400).json({message: error.message})
-    }
-})
-
-//Get all Method
-router.get('/getAll', async (req, res) => {
-    try{
-        const data = await Model.find();
-        res.json(data)
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-
-//Get by ID Method
-router.get('/getOne/:id', async (req, res) => {
-    try{
-        const data = await Model.findById(req.params.id);
-        res.json(data)
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-
-//Update by ID Method
-router.patch('/update/:id', async (req, res) => {
+  });
+  
+  // Get one major by code
+  router.get('/code/:code', async (req, res) => {
     try {
-        const id = req.params.id;
-        const updatedData = req.body;
-        const options = { new: true };
-
-        const result = await Model.findByIdAndUpdate(
-            id, updatedData, options
-        )
-
-        res.send(result)
+      const major = await Major.findOne({ code: req.params.code });
+      if (!major) {
+        return res.status(404).json({ message: 'Cannot find major' });
+      }
+      res.json(major);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
-    catch (error) {
-        res.status(400).json({ message: error.message })
-    }
-})
-
-//Delete by ID Method
-//Delete by ID Method
-router.delete('/delete/:id', async (req, res) => {
+  });
+  
+  // Create a major
+  router.post('/', async (req, res) => {
+    const major = new Major({
+      name: req.body.name,
+      code: req.body.code,
+      description: req.body.description,
+    });
+  
     try {
-        const id = req.params.id;
-        const data = await Model.findByIdAndDelete(id)
-        res.send(`Document with ${data.name} has been deleted..`)
+      const newMajor = await major.save();
+      res.status(201).json(newMajor);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
     }
-    catch (error) {
-        res.status(400).json({ message: error.message })
+  });
+  
+  // Update a major by code
+  router.put('/code/:code', async (req, res) => {
+    try {
+      const major = await Major.findOne({ code: req.params.code });
+      if (!major) {
+        return res.status(404).json({ message: 'Cannot find major' });
+      }
+  
+      if (req.body.name != null) {
+        major.name = req.body.name;
+      }
+      if (req.body.description != null) {
+        major.description = req.body.description;
+      }
+  
+      const updatedMajor = await major.save();
+      res.json(updatedMajor);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
     }
-})
-
-//This GET route will respond with "Hello World" in a json object
-router.get('/hello', async (req, res) => {
-    const customMessage = req.query.message ? `Hello ${req.query.message}` : "Hello World";
-    res.json({ response: customMessage });
-})
-
-// POST route allowing us the create users
-router.post('/user', async (req, res) => {
-    const data = new Model({
-        name: req.body.name,
-        lastname: req.body.lastname
-    })
-    res.json({ response: `El usuario ${name} ${lastname} fue creado` });
-});
+  });
+  
+  // Delete a major by code
+  router.delete('/code/:code', async (req, res) => {
+    try {
+      const major = await Major.findOne({ code: req.params.code });
+      if (!major) {
+        return res.status(404).json({ message: 'Cannot find major' });
+      }
+  
+      await major.remove();
+      res.json({ message: 'Deleted major' });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+  
+  module.exports = router;

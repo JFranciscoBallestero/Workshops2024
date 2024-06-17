@@ -78,7 +78,7 @@ router.delete('/code/:code', async (req, res) => {
   }
 });
 
-app.get('/api/majors/search', async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
       const { name, sort } = req.query;
       const filter = name ? { name: new RegExp(name, 'i') } : {};

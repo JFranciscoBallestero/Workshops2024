@@ -78,4 +78,17 @@ router.delete('/code/:code', async (req, res) => {
   }
 });
 
+app.get('/api/majors/search', async (req, res) => {
+  try {
+      const { name, sort } = req.query;
+      const filter = name ? { name: new RegExp(name, 'i') } : {};
+      const sortOption = sort === 'asc' ? { name: 1 } : sort === 'desc' ? { name: -1 } : {};
+
+      const majors = await Major.find(filter).sort(sortOption);
+      res.json(majors);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

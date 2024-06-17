@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateMajorForm = document.getElementById('updateMajorForm');
     const deleteMajorForm = document.getElementById('deleteMajorForm');
     const majorsList = document.getElementById('majorsList');
+    const searchKeywordInput = document.getElementById('searchKeyword');
+    const sortOrderSelect = document.getElementById('sortOrder');
 
     // Event listeners
     addMajorForm.addEventListener('submit', handleAddMajor);
@@ -62,17 +64,24 @@ async function handleAddMajor(event) {
 async function handleSearchMajor(event) {
     event.preventDefault();
 
-    const code = document.getElementById('searchCode').value;
+    const keyword = searchKeywordInput.value;
+    const sortOrder = sortOrderSelect.value;
+    const url = new URL('http://localhost:3000/api/majors/search');
+    url.searchParams.append('name', keyword);
+    if (sortOrder) {
+        url.searchParams.append('sort', sortOrder);
+    }
 
-    const response = await fetch(`http://localhost:3000/api/majors/code/${code}`);
-
-    const major = await response.json();
-
-    if (response.ok) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Failed to fetch majors');
+        }
+        const majors = await response.json();
         majorsList.innerHTML = '';
-        displayMajor(major);
-    } else {
-        alert(major.message || 'Major not found');
+        majors.forEach(displayMajor);
+    } catch (error) {
+        console.error('Error fetching majors:', error);
     }
 }
 

@@ -64,24 +64,21 @@ async function handleAddMajor(event) {
 async function handleSearchMajor(event) {
     event.preventDefault();
 
-    const keyword = searchKeywordInput.value;
-    const sortOrder = sortOrderSelect.value;
-    const url = new URL('http://localhost:3000/api/majors/search');
-    url.searchParams.append('name', keyword);
-    if (sortOrder) {
-        url.searchParams.append('sort', sortOrder);
-    }
+    const name = document.getElementById('searchName').value;
 
     try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Failed to fetch majors');
-        }
+        const response = await fetch(`http://localhost:3000/api/majors/search?name=${encodeURIComponent(name)}`);
         const majors = await response.json();
-        majorsList.innerHTML = '';
-        majors.forEach(displayMajor);
+
+        if (response.ok) {
+            majorsList.innerHTML = '';
+            majors.forEach(major => displayMajor(major));
+        } else {
+            alert(majors.message || 'Major not found');
+        }
     } catch (error) {
-        console.error('Error fetching majors:', error);
+        console.error('Error:', error);
+        alert('Failed to search majors');
     }
 }
 

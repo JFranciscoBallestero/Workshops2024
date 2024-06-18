@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteMajorForm = document.getElementById('deleteMajorForm');
     const majorsList = document.getElementById('majorsList');
     const refreshMajorsButton = document.getElementById('refreshMajorsButton');
+    const sortAscButton = document.getElementById('sortAscButton');
+    const sortDescButton = document.getElementById('sortDescButton');
 
     // Event listeners
     addMajorForm.addEventListener('submit', handleAddMajor);
@@ -13,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMajorForm.addEventListener('submit', handleUpdateMajor);
     deleteMajorForm.addEventListener('submit', handleDeleteMajor);
     refreshMajorsButton.addEventListener('click', handleRefreshMajors);
+    sortAscButton.addEventListener('click', () => handleSortMajors('asc'));
+    sortDescButton.addEventListener('click', () => handleSortMajors('desc'));
 
     fetchAllMajors();
 
@@ -52,7 +56,6 @@ async function handleAddMajor(event) {
 
     if (response.ok) {
         displayMajor(newMajor);
-        // Clear the form fields
         document.getElementById('name').value = '';
         document.getElementById('code').value = '';
         document.getElementById('description').value = '';
@@ -140,6 +143,25 @@ async function handleRefreshMajors() {
         alert('Failed to fetch majors');
     }
 }
+
+async function handleSortMajors(order) {
+    const name = document.getElementById('searchName').value;
+    try {
+        const response = await fetch(`http://localhost:3000/api/majors/search?name=${encodeURIComponent(name)}&sort=${order}`);
+        const majors = await response.json();
+
+        if (response.ok) {
+            majorsList.innerHTML = '';
+            majors.forEach(major => displayMajor(major));
+        } else {
+            alert('Failed to fetch majors');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to fetch majors');
+    }
+}
+
 
 function displayMajor(major) {
     const majorItem = document.createElement('li');

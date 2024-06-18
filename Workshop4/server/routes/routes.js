@@ -83,7 +83,6 @@ router.get('/search', async (req, res) => {
       const { name, sort } = req.query;
       const filter = name ? { name: new RegExp(name, 'i') } : {};
       const sortOption = sort === 'asc' ? { name: 1 } : sort === 'desc' ? { name: -1 } : {};
-
       const majors = await Major.find(filter).sort(sortOption);
       res.json(majors);
   } catch (err) {

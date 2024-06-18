@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateMajorForm = document.getElementById('updateMajorForm');
     const deleteMajorForm = document.getElementById('deleteMajorForm');
     const majorsList = document.getElementById('majorsList');
-    const searchKeywordInput = document.getElementById('searchKeyword');
-    const sortOrderSelect = document.getElementById('sortOrder');
+    const refreshMajorsButton = document.getElementById('refreshMajorsButton');
 
     // Event listeners
     addMajorForm.addEventListener('submit', handleAddMajor);
     searchMajorForm.addEventListener('submit', handleSearchMajor);
     updateMajorForm.addEventListener('submit', handleUpdateMajor);
     deleteMajorForm.addEventListener('submit', handleDeleteMajor);
+    refreshMajorsButton.addEventListener('click', handleRefreshMajors);
 
     fetchAllMajors();
 
@@ -121,6 +121,23 @@ async function handleDeleteMajor(event) {
     } else {
         const errorResponse = await response.json();
         alert(errorResponse.message || 'Failed to delete major');
+    }
+}
+
+async function handleRefreshMajors() {
+    try {
+        const response = await fetch('http://localhost:3000/api/majors');
+        const majors = await response.json();
+
+        if (response.ok) {
+            majorsList.innerHTML = '';
+            majors.forEach(major => displayMajor(major));
+        } else {
+            alert('Failed to fetch majors');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to fetch majors');
     }
 }
 
